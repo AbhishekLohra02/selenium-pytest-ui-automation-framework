@@ -1,0 +1,58 @@
+name: UI Automation Tests
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  ui-tests:
+    name: Run ${{ matrix.suite }} tests
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        suite:
+          - smoke
+          - sanity
+          - regression
+
+    defaults:
+      run:
+        working-directory: Framework
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: Framework/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run pytest ${{ matrix.suite }} suite
+        env:
+          HEADLESS: "true"
+        run: |
+          pytest -m ${{ matrix.suite }} --headless --junitxml=reports/${{ matrix.suite }}-results.xml --html=reports/${{ matrix.suite }}-report.html --self-contained-html
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.suite }}-test-reports
+          path: Framework/reports/

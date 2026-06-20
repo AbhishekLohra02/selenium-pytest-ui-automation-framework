@@ -1,0 +1,16 @@
+# Python environments and cache
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Test execution output
+Framework/reports/*.html
+Framework/reports/*.xml
+Framework/reports/screenshots/*.png
+
+# Local configuration and editor settings
+.env
+.idea/
+.vscode/
