@@ -45,7 +45,8 @@ def setup(request):
     else:
         raise ValueError(f"Unsupported browser: {browser}")
 
-    driver.maximize_window()
+    if not headless:
+        driver.maximize_window()
     driver.get(BASE_URL)
 
     yield driver

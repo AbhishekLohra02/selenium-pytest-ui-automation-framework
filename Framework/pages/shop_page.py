@@ -4,7 +4,7 @@ from pages.base_page import BasePage
 
 class ShopPage(BasePage):
     product_cards = (By.CSS_SELECTOR, ".card.h-100")
-    checkout_button = (By.CSS_SELECTOR, "a.nav-link.btn.btn-primary")
+    checkout_button = (By.CSS_SELECTOR, "a[href='/angularpractice/checkout']")
 
     def add_product_to_cart(self, product_name):
         products = self.find_elements(self.product_cards)
